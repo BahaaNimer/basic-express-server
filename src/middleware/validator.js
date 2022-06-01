@@ -1,17 +1,18 @@
 'use strict';
 function validator() {
   return (req, res, next) => {
-    let name = req.params.name;
-    if (typeof name === 'string' && name.length > 0) {
+    let regx = /^[a-zA-Z]+$/;
+    if (regx.test(req.query.name)) {
       next();
-    } else {
-      res.status(500).send({
-        code: 500,
-        route: req.path,
-        message: "Internal Server Error",
-      });
     }
-  };
+    else if (req.query.name === "") {
+      req.query.name = "";
+      next('The name is required');
+    }
+    else if (!regx.test(req.query.name)) {
+      req.query.name = "wrong Name";
+      next('The name should be a string');
+    }
+  }
 }
-
 module.exports = validator;

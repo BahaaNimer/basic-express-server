@@ -9,14 +9,14 @@ const errorHandler = require("./error-handlers/500");
 const app = express();
 
 app.use(logger);
-app.get(`/person/:name`, validator(), (req, res) => {
-  res.json({
-    name: `${req.params.name}`,
+app.get(`/person`, validator(), (req, res) => {
+  res.status(200).json({
+    name: `${req.query.name}`,
   });
 });
 
+app.use('*', notFoundPage);
 app.use(errorHandler);
-app.use(notFoundPage);
 
 function start(PORT) {
   app.listen(PORT, () => {
